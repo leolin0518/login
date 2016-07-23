@@ -45,8 +45,6 @@ private slots:
 
     void on_btn_regist_clicked();
 
-    void on_btn_edit_clicked();
-
     void slot_minWindow();
 
     void slot_closeWindow();
@@ -58,6 +56,8 @@ private slots:
     void slot_timer2();
 
     void on_cBox_account_activated(int index);
+
+    void on_btn_edit_pwd_clicked();
 
 public:
     UserInfoStu user_info_stu;

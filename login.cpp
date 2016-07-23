@@ -3,6 +3,7 @@
 
 #include "exam.h"
 #include "passwdedit.h"
+#include "register.h"
 
 #include <QMessageBox>
 #include <QToolButton>
@@ -33,7 +34,7 @@ void Login::init()
 {
     setWindowTitle(tr("登录"));
 
-    ui->btn_edit->setStyleSheet("background-color:transparent;");
+    ui->btn_edit_pwd->setStyleSheet("background-color:transparent;");
     ui->btn_regist->setStyleSheet("background-color:transparent;");
     ui->btn_login->setStyleSheet("background-color:transparent;");
 
@@ -118,16 +119,54 @@ void Login::init_sql()
 {
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("user.db");
-    if (!db.open()){
+    if (!db.open())
+    {
         qDebug() << "database open fail!";
-    }else{
+    }
+    else
+    {
         qDebug() << "database open success!";
         QSqlQuery q;
-        q.exec("CREATE TABLE userInfo (name VARCHAR PRIMARY KEY,passwd VARCHAR)");
 
-        q.exec("insert into userInfo values ('admin','1')");
-        q.exec("insert into userInfo values ('www','2')");
-        q.exec("insert into userInfo values ('leo','22')");
+        //创建一个名为userInfo的表 顺序为: 用户名 密码 email
+         QString sql_create_table = "CREATE TABLE userInfo (name VARCHAR PRIMARY KEY,passwd VARCHAR, email VARCHAR)";
+         q.prepare(sql_create_table);
+       // q.exec("CREATE TABLE userInfo (name VARCHAR PRIMARY KEY,passwd VARCHAR, email VARCHAR)");
+        if(!q.exec())
+        {
+            qDebug()<<"creater table error";
+        }
+/*
+        //选择数据库里面，table名字为userInfo的表
+        bool tableFlag=false;
+        QString sql_select_table = "select tbl_name userInfo from sqlite_master where type = 'table'";
+        q.prepare(sql_select_table);
+        if(!q.exec())
+        {
+            qDebug()<<"select table error";
+        }
+        else
+        {
+            QString tableName;
+            while(q.next())
+            {
+                tableName = q.value(0).toString();
+                qDebug()<<tableName;
+                if(tableName.compare("userInfo"))//查找表名是否和user相匹配
+                {
+                    tableFlag=false;
+                    qDebug()<<"table is not exist";
+                }
+                else
+                {
+                    tableFlag=true;
+                    qDebug()<<"table is exist";
+                }
+            }
+        }
+*/
+
+        q.exec("insert into userInfo values ('operator','operator','help@demo.com')");
         q.exec("select * from userInfo");
 
         while (q.next())
@@ -151,7 +190,7 @@ void Login::mousePressEvent(QMouseEvent *e)
         m_Drag = true;
         m_point = e->globalPos() - this->pos();
         e->accept();
-        qDebug()<<"leo";
+      //  qDebug()<<"leo";
     }
 }
 
@@ -160,7 +199,7 @@ void Login::mouseMoveEvent(QMouseEvent *e)
     if (m_Drag && (e->buttons() && Qt::LeftButton)) {
         move(e->globalPos() - m_point);
         e->accept();
-        qDebug()<<"leomove";
+       // qDebug()<<"leomove";
     }
 }
 
@@ -225,7 +264,18 @@ void Login::on_btn_login_clicked()
 }
 
 
+//注册button
+void Login::on_btn_regist_clicked()
+{
+    Register r(this);
+    this->hide();
+    r.show();
+   //transmitdb(database);
+    r.exec();
+    this->show();
+}
 
+/*
 //注册button
 void Login::on_btn_regist_clicked()
 {
@@ -272,10 +322,10 @@ void Login::on_btn_regist_clicked()
         db.close();
     }
 }
-
+*/
 
 //修改密码button
-void Login::on_btn_edit_clicked()
+void Login::on_btn_edit_pwd_clicked()
 {
     if(ui->cBox_account->currentText().isEmpty() ||
             ui->lineEdit_passwd->text().isEmpty()){
@@ -391,3 +441,6 @@ void Login::on_cBox_account_activated(int index)
     qDebug() << "change cBox:" << ui->cBox_account->currentText()
              << userPasswd.at(index);
 }
+
+
+

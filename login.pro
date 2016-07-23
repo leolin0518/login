@@ -16,15 +16,18 @@ RC_FILE = myapp.rc
 SOURCES += main.cpp\
         login.cpp \
     exam.cpp \
-    passwdedit.cpp
+    passwdedit.cpp \
+    register.cpp
 
 HEADERS  += login.h \
     exam.h \
-    passwdedit.h
+    passwdedit.h \
+    register.h
 
 FORMS    += login.ui \
     exam.ui \
-    passwdedit.ui
+    passwdedit.ui \
+    register.ui
 
 RESOURCES += \
     myqrc.qrc
