@@ -98,7 +98,7 @@ void Register::on_registerCheckButton_clicked()
 //    //查询最大id end
     QSqlDatabase db;
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("user.db");
+    db.setDatabaseName("database.db");
     if (!db.open())
     {
         qDebug() << "database open fail in register!";

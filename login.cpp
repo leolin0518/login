@@ -118,9 +118,8 @@ void Login::configWindow()
 void Login::init_sql()
 {
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("user.db");
-    if (!db.open())
-    {
+    db.setDatabaseName("database.db");
+    if (!db.open()){
         qDebug() << "database open fail!";
     }
     else
