@@ -7,7 +7,7 @@
 #include <QMouseEvent>
 #include <QTimer>
 
-struct User{
+struct UserInfoStu{
     QString userName;
     QString passwd;
 };
@@ -25,10 +25,10 @@ public:
     ~Login();
 
     void init();
-    void setUser();
+    void get_user_info();
     void configWindow();
 
-    void operateSql();
+    void init_sql();
 
 protected:
     void mousePressEvent(QMouseEvent *e);
@@ -60,7 +60,7 @@ private slots:
     void on_cBox_account_activated(int index);
 
 public:
-    User user;
+    UserInfoStu user_info_stu;
     QSqlDatabase db;
 
 private:

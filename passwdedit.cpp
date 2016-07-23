@@ -36,6 +36,8 @@ void passwdEdit::setLogin(Login *m)
 
 void passwdEdit::on_btn_ok_clicked()
 {
+  //  login->show();
+
     QString oldPasswd = ui->lineEdit_passwd->text();
     QString newPasswd = ui->lineEdit_newPasswd->text();
     QString passwdOk = ui->lineEdit_passwdOk->text();
@@ -46,7 +48,7 @@ void passwdEdit::on_btn_ok_clicked()
     }
     else
     {
-        if(oldPasswd == login->user.passwd)
+        if(oldPasswd == login->user_info_stu.passwd)
         {
             if(oldPasswd == newPasswd)
             {
@@ -63,7 +65,7 @@ void passwdEdit::on_btn_ok_clicked()
                 {
                     QSqlQuery query;
                     query.exec(tr("update userInfo set passwd = '%1' where name = '%2'")
-                               .arg(newPasswd).arg(login->user.userName));
+                               .arg(newPasswd).arg(login->user_info_stu.userName));
 
                     QMessageBox::information(this,tr("提示"),tr("密码修改成功！"));
 
