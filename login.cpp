@@ -12,6 +12,7 @@
 #include <QDir>
 #include <QDebug>
 
+
 float opacity1 = 0.0, opacity2 = 1.0;
 
 Login::Login(QWidget *parent) :
@@ -34,23 +35,11 @@ void Login::init()
 {
     setWindowTitle(tr("登录"));
 
-    ui->btn_edit_pwd->setStyleSheet("background-color:transparent;");
-    ui->btn_regist->setStyleSheet("background-color:transparent;");
-    ui->btn_login->setStyleSheet("background-color:transparent;");
+//    ui->btn_edit_pwd->setStyleSheet("background-color:transparent;");
+//    ui->btn_regist->setStyleSheet("background-color:transparent;");
+//    ui->btn_login->setStyleSheet("background-color:transparent;");
 
     m_Drag = false;
-
-    configWindow();//去边框，最小化，最大化button
-
-
-    //填充背景图片 start
-    QPalette palette;
-    palette.setBrush(/*QPalette::Background*/this->backgroundRole(),
-                     QBrush(QPixmap(":/images/QQ1.png")));
-    this->setPalette(palette);
-    //填充背景图片 ends
-
-
 
     timer1 = new QTimer;
     timer1->start(5);
@@ -58,19 +47,7 @@ void Login::init()
     connect(timer1, SIGNAL(timeout()), this, SLOT(slot_timer1()));
     connect(timer2, SIGNAL(timeout()), this, SLOT(slot_timer2()));
 
-    //添加键盘ico
-    QToolButton *keyBtn = new QToolButton(this);
-    keyBtn->setIcon(QIcon(":/images/keyBoard.png"));
-    keyBtn->setStyleSheet("background-color:transparent;");
-
-    //设置键盘ico坐标
-    int x = ui->lineEdit_passwd->x();
-    int y = ui->lineEdit_passwd->y();
-    int width = ui->lineEdit_passwd->width();
-    keyBtn->setGeometry(x+width-20, y, 20, 20);
-    //关联键盘exe
-    connect(keyBtn, SIGNAL(clicked()), this, SLOT(slot_getKeyBoard()));
-
+    configWindow();//UI界面设置  去边框，最小化，最大化button
     init_sql();//初始化界面密码，帐号的初值
 
     //init记住密码
@@ -88,32 +65,28 @@ void Login::get_user_info()
 
 void Login::configWindow()
 {
+
+    // 填充背景图片
+     QPalette palette;
+     palette.setBrush(/*QPalette::Background*/this->backgroundRole(),
+                      //QBrush(QPixmap(":/images/QQ1.png")));
+                        QBrush(QPixmap(":/images/background.png")));
+     this->setPalette(palette);
+
+
     //去掉窗口边框
     setWindowFlags(Qt::FramelessWindowHint);
-    //获取界面的宽度
-    int width = this->width();
-    //构建最小化、最大化、关闭按钮
-    QToolButton *minBtn = new QToolButton(this);
-    QToolButton *closeBbtn= new QToolButton(this);
-//    //获取最小化、关闭按钮图标
-//    QPixmap minPix  = style()->standardPixmap(QStyle::SP_TitleBarMinButton);
-//    QPixmap closePix = style()->standardPixmap(QStyle::SP_TitleBarCloseButton);
-//    //设置最小化、关闭按钮图标
-//    minBtn->setIcon(minPix);
-//    closeBbtn->setIcon(closePix);
-    //设置最小化、关闭按钮在界面的位置
-    minBtn->setGeometry(width-55,5,20,20);
-    closeBbtn->setGeometry(width-25,5,20,20);
-    //设置鼠标移至按钮上的提示信息
-    minBtn->setToolTip(tr("最小化"));
-    closeBbtn->setToolTip(tr("关闭"));
-    //设置最小化、关闭按钮的样式
-    minBtn->setStyleSheet("background-color:transparent;");
-    closeBbtn->setStyleSheet("background-color:transparent;");
-    //关联最小化、关闭按钮的槽函数
-    connect(minBtn, SIGNAL(clicked()), this, SLOT(slot_minWindow()));
-    connect(closeBbtn, SIGNAL(clicked()), this, SLOT(slot_closeWindow()));
+
+    //设置top ,user img
+    set_top_img(true, -1);//设置图片显示为随机显示
+    set_user_img(true, -1);//设置user图片为随机显示
+    qDebug() << "xxxxxxxxxxxxxxxxxxxxxxx" ;
+
+    //设置UI的按钮button
+    set_button();
+
 }
+
 
 void Login::init_sql()
 {
@@ -183,6 +156,126 @@ void Login::init_sql()
     qDebug()<<"database closed!";
 }
 
+void Login::set_top_img(bool isSandom, int index_img)
+{
+    //427 185
+    int set_index_img = 1;
+    if(isSandom == true)//随机显示topimg
+    {
+
+        QTime time_sand;
+        time_sand= QTime::currentTime();//获取当前时间
+        qsrand(time_sand.msec()+time_sand.second()*1000);
+
+        //index_img = qrand()%5 ;//在0-4中选出随机数
+        set_index_img = qrand()%5 + 1 ;//在1-5中选出随机数
+
+    }
+    if(isSandom == false) //不随机显示，按index_img显示图片s
+    {
+        set_index_img = index_img;
+    }
+
+    QString top_img_path=":/images/top_img1.png";
+    qDebug()<< "             [leo]" << top_img_path;
+    QImage top_img;
+    top_img_path = ":/images/top_img" + QString::number(set_index_img, 10)  + ".png";
+    qDebug()<< "             [leo]" << top_img_path;
+    top_img.load(top_img_path);
+    QPixmap top_pic=QPixmap::fromImage(top_img.scaled(ui->label_top_img->width(),ui->label_top_img->height()));
+    ui->label_top_img->setPixmap(top_pic);
+    qDebug() << "          [leo]top_img width heigh:" << ui->label_top_img->width()
+             << " " << ui->label_top_img->height();
+}
+
+void Login::set_button()
+{
+
+
+    //构建最小化、关闭按钮,设置按钮，键盘ico
+    QToolButton *minBtn = new QToolButton(this);
+    QToolButton *closeBbtn= new QToolButton(this);
+    QToolButton *setBtn = new QToolButton(this);
+    QToolButton *keyBtn = new QToolButton(this);
+
+//    //获取最小化、关闭按钮图标
+//    QPixmap minPix  = style()->standardPixmap(QStyle::SP_TitleBarMinButton);
+//    QPixmap closePix = style()->standardPixmap(QStyle::SP_TitleBarCloseButton);
+//    //设置最小化、关闭按钮图标
+//    minBtn->setIcon(minPix);
+//    closeBbtn->setIcon(closePix);
+
+    //获取界面的宽度
+    int width = this->width();
+    //设置最小化、关闭按钮在界面的位置
+    minBtn->setGeometry(width-55,5,20,20);
+    closeBbtn->setGeometry(width-25,5,20,20);
+    setBtn->setGeometry(width-80,7,15,15);
+    //设置键盘ico坐标
+    int x = ui->lineEdit_passwd->x();
+    int y = ui->lineEdit_passwd->y();
+    int widthkey = ui->lineEdit_passwd->width();
+    keyBtn->setGeometry(x+widthkey-20, y, 20, 20);
+
+    qDebug() << "[leo]width:" << width ;
+    qDebug() << "[leo]minBtn" << minBtn->geometry();
+    qDebug() << "[leo]closeBbtn" << closeBbtn->geometry();
+
+
+    //设置鼠标移至按钮上的提示信息
+    minBtn->setToolTip(tr("最小化"));
+    closeBbtn->setToolTip(tr("关闭"));
+    setBtn->setToolTip(tr("设置"));
+    keyBtn->setToolTip(tr("虚拟键盘"));
+
+    //设置最小化、关闭按钮的样式图标
+    minBtn->setIcon(QIcon(":/images/ico/mini.png"));
+    minBtn->setStyleSheet("background-color:transparent;");
+    closeBbtn->setIcon(QIcon(":/images/ico/close.png"));
+    closeBbtn->setStyleSheet("background-color:transparent;");
+    setBtn->setIcon(QIcon(":/images/ico/setting.png"));
+    setBtn->setStyleSheet("background-color:transparent;");
+    keyBtn->setIcon(QIcon(":/images/keyBoard.png"));
+    keyBtn->setStyleSheet("background-color:transparent;");
+
+    //关联最小化、关闭按钮的槽函数,键盘exe
+    connect(minBtn, SIGNAL(clicked()), this, SLOT(slot_minWindow()));
+    connect(closeBbtn, SIGNAL(clicked()), this, SLOT(slot_closeWindow()));
+    connect(keyBtn, SIGNAL(clicked()), this, SLOT(slot_getKeyBoard()));
+}
+
+void Login::set_user_img(bool isSandom, int index_img)
+{
+    //40,182 85 85
+    int set_index_img = 1;
+    if(isSandom == true)//随机显示userimg
+    {
+
+        QTime time_sand;
+        time_sand= QTime::currentTime();//获取当前时间
+        qsrand(time_sand.msec()+time_sand.second()*1000);
+        set_index_img = qrand()%5 + 1 ;//在1-5中选出随机数
+
+    }
+    if(isSandom == false) //不随机显示，按index_img显示图片s
+    {
+        set_index_img = index_img;
+    }
+
+    QString user_img_path=":/images/ico/user1.png";
+    qDebug()<< "             [leo]user" << user_img_path;
+    QImage user_img;
+    user_img_path = ":/images/ico/user" + QString::number(set_index_img, 10)  + ".png";
+    qDebug()<< "             [leo]user" << user_img_path;
+    user_img.load(user_img_path);
+    QPixmap img_pic=QPixmap::fromImage(user_img.scaled(ui->label_user_img->width(),
+                                                       ui->label_user_img->height()));
+                                       ui->label_user_img->setPixmap(img_pic);
+    qDebug() << "             [leo]user_img width heigh:" << ui->label_user_img->width()
+             << " " << ui->label_user_img->height();
+}
+
+
 void Login::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
@@ -209,12 +302,14 @@ void Login::mouseReleaseEvent(QMouseEvent *e)
 
 void Login::on_btn_login_clicked()
 {
+    qDebug() << "login:" << user_info_stu.userName << user_info_stu.passwd;
     if(ui->cBox_account->currentText().isEmpty() ||
             ui->lineEdit_passwd->text().isEmpty()){
         QMessageBox::warning(this,tr("警告"),tr("请输入用户名和密码！"));
     }
     else
     {
+        qDebug() << "login name:" << add_select_user_name_last << "pwd:" << add_select_user_pwd_last;
         int is_use_exist_flag = 0;       //判断用户是否存在
         int is_use_nampwd_check_flag = 0;       //判断用户名和密码是否匹配
         get_user_info();
@@ -263,22 +358,30 @@ void Login::on_btn_login_clicked()
 }
 
 
+////注册button
+//void Login::on_btn_regist_clicked()
+//{
+//    Register r(this);
+//    this->hide();
+//    r.show();
+//   //transmitdb(database);
+//    r.exec();
+//    this->show();
+//}
+
 //注册button
 void Login::on_btn_regist_clicked()
 {
-    Register r(this);
-    this->hide();
-    r.show();
+    Register r;
+    r.setParent(this);      //设置父对象
+//    this->hide();
+//    r.show();
    //transmitdb(database);
     r.exec();
-    this->show();
-}
 
-/*
-//注册button
-void Login::on_btn_regist_clicked()
-{
-    get_user_info();
+    qDebug() << "name:" << add_select_user_name_last << "pwd:" << add_select_user_pwd_last;
+
+//    get_user_info();
     if(user_info_stu.userName.isEmpty() || user_info_stu.passwd.isEmpty()){
         QMessageBox::information(this,tr("提示"),tr("请输入用户名和密码！"));
     }
@@ -307,13 +410,23 @@ void Login::on_btn_regist_clicked()
             }
 
             if(exitFlag == false){
-                query.exec(tr("insert into userInfo values ('%1','%2')")
-                           .arg(user_info_stu.userName).arg(user_info_stu.passwd));
+                query.exec(tr("insert into userInfo values ('%1','%2','%3')")
+                           .arg(user_info_stu.userName).arg(user_info_stu.passwd)
+                           .arg(user_info_stu.email));
+                qDebug() << "ddd:" << user_info_stu.userName << user_info_stu.passwd << user_info_stu.email;
                 qDebug()<<"regist:::"<<query.lastQuery();
 
                 ui->cBox_account->addItem(user_info_stu.userName);
                 userPasswd.append(user_info_stu.passwd);
                 QMessageBox::information(this,tr("提示"),tr("注册成功！"));
+
+                query.exec("select * from userInfo");
+                while (query.next())
+                {
+                    QString userName = query.value(0).toString();
+                    QString passwd = query.value(1).toString();
+                    qDebug() << "regist userName:::"<< userName << "passwd:::" << passwd;
+                }
             }else{
                 QMessageBox::warning(this,tr("警告"),tr("用户已存在！"));
             }
@@ -321,7 +434,6 @@ void Login::on_btn_regist_clicked()
         db.close();
     }
 }
-*/
 
 //修改密码button
 void Login::on_btn_edit_pwd_clicked()
@@ -442,4 +554,10 @@ void Login::on_cBox_account_activated(int index)
 }
 
 
+//下拉框选里面的项时，会切换top_img的图片和头像图片
+void Login::on_cBox_account_currentIndexChanged(int index)
+{
+   set_top_img(true,index);
+   set_user_img(true,index);
+}
 

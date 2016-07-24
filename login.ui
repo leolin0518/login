@@ -42,8 +42,11 @@
      <pointsize>9</pointsize>
     </font>
    </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(11, 163, 219);</string>
+   </property>
    <property name="text">
-    <string/>
+    <string>注册帐号</string>
    </property>
    <property name="flat">
     <bool>true</bool>
@@ -84,56 +87,11 @@
      <pointsize>9</pointsize>
     </font>
    </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="flat">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox_rPasswd">
-   <property name="geometry">
-    <rect>
-     <x>131</x>
-     <y>261</y>
-     <width>16</width>
-     <height>16</height>
-    </rect>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(11, 163, 219);</string>
    </property>
    <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox_autoLogin">
-   <property name="geometry">
-    <rect>
-     <x>258</x>
-     <y>261</y>
-     <width>16</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btn_login">
-   <property name="geometry">
-    <rect>
-     <x>129</x>
-     <y>286</y>
-     <width>198</width>
-     <height>33</height>
-    </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>169</width>
-     <height>20</height>
-    </size>
-   </property>
-   <property name="text">
-    <string/>
+    <string>找回密码</string>
    </property>
    <property name="flat">
     <bool>true</bool>
@@ -156,6 +114,97 @@
    <property name="editable">
     <bool>true</bool>
    </property>
+  </widget>
+  <widget class="QLabel" name="label_top_img">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>427</width>
+     <height>185</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_user_img">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>195</y>
+     <width>80</width>
+     <height>80</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_login">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>290</y>
+     <width>100</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>登录</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>131</x>
+     <y>260</y>
+     <width>69</width>
+     <height>15</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QCheckBox" name="checkBox_rPasswd">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>记住密码</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>258</x>
+     <y>260</y>
+     <width>69</width>
+     <height>15</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QCheckBox" name="checkBox_autoLogin">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>自动登录</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

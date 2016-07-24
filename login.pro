@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui sql
-QT += widgets
+QT       += widgets
 
 TARGET = login
 TEMPLATE = app

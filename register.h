@@ -21,6 +21,8 @@ public:
     explicit Register(QWidget *parent = 0);
     ~Register();
 
+    void setParent(Login *dialog);
+
     QSqlDatabase database;//database为注册的数据库名称
     bool tableFlag;
     int sql_max_id;
@@ -31,6 +33,8 @@ private slots:
 
 private:
     Ui::Register *ui;
+
+    Login *pWidget;         //父对象
 
 };
 
