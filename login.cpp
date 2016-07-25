@@ -6,12 +6,11 @@
 #include "register.h"
 
 #include <QMessageBox>
-#include <QToolButton>
 #include <QUrl>
 #include <QDesktopServices>
 #include <QDir>
 #include <QDebug>
-
+#include <QMenu>
 
 float opacity1 = 0.0, opacity2 = 1.0;
 
@@ -190,13 +189,11 @@ void Login::set_top_img(bool isSandom, int index_img)
 
 void Login::set_button()
 {
-
-
     //构建最小化、关闭按钮,设置按钮，键盘ico
-    QToolButton *minBtn = new QToolButton(this);
-    QToolButton *closeBbtn= new QToolButton(this);
-    QToolButton *setBtn = new QToolButton(this);
-    QToolButton *keyBtn = new QToolButton(this);
+    minBtn = new QToolButton(this);
+    closeBbtn = new QToolButton(this);
+    setBtn = new QToolButton(this);
+    keyBtn = new QToolButton(this);
 
 //    //获取最小化、关闭按钮图标
 //    QPixmap minPix  = style()->standardPixmap(QStyle::SP_TitleBarMinButton);
@@ -221,7 +218,6 @@ void Login::set_button()
     qDebug() << "[leo]minBtn" << minBtn->geometry();
     qDebug() << "[leo]closeBbtn" << closeBbtn->geometry();
 
-
     //设置鼠标移至按钮上的提示信息
     minBtn->setToolTip(tr("最小化"));
     closeBbtn->setToolTip(tr("关闭"));
@@ -242,6 +238,9 @@ void Login::set_button()
     connect(minBtn, SIGNAL(clicked()), this, SLOT(slot_minWindow()));
     connect(closeBbtn, SIGNAL(clicked()), this, SLOT(slot_closeWindow()));
     connect(keyBtn, SIGNAL(clicked()), this, SLOT(slot_getKeyBoard()));
+    connect(setBtn, SIGNAL(clicked()), this, SLOT(slot_setLanguage()));
+
+    create_menuLanguage();      //创建语言菜单
 }
 
 void Login::set_user_img(bool isSandom, int index_img)
@@ -273,6 +272,40 @@ void Login::set_user_img(bool isSandom, int index_img)
                                        ui->label_user_img->setPixmap(img_pic);
     qDebug() << "             [leo]user_img width heigh:" << ui->label_user_img->width()
              << " " << ui->label_user_img->height();
+}
+
+void Login::create_menuLanguage()
+{
+    //语言
+    act_chinese = new QAction(tr("简体中文"), this);
+    act_english = new QAction(tr("English"), this);
+    menu1 = new QMenu;
+    menu1->addAction(act_chinese);
+    menu1->addAction(act_english);
+
+    //在线状态
+    act0 = new QAction(tr("在线"), this);
+    act1 = new QAction(tr("隐身"), this);
+    act2 = new QAction(tr("离线"), this);
+    act3 = new QAction(tr("忙碌"), this);
+
+    actGrp = new QActionGroup(this);
+    actGrp->addAction(act0);
+    actGrp->addAction(act1);
+    actGrp->addAction(act2);
+    actGrp->addAction(act3);
+    connect(actGrp, SIGNAL(triggered(QAction*)), this, SLOT(slot_actGrp(QAction*)));
+
+    menu2 = new QMenu;
+    menu2->addAction(act0);
+    menu2->addAction(act1);
+    menu2->addAction(act2);
+    menu2->addAction(act3);
+
+    menu1->addAction(act0);
+    menu1->addAction(act1);
+    menu1->addAction(act2);
+    menu1->addAction(act3);
 }
 
 
@@ -309,7 +342,6 @@ void Login::on_btn_login_clicked()
     }
     else
     {
-        qDebug() << "login name:" << add_select_user_name_last << "pwd:" << add_select_user_pwd_last;
         int is_use_exist_flag = 0;       //判断用户是否存在
         int is_use_nampwd_check_flag = 0;       //判断用户名和密码是否匹配
         get_user_info();
@@ -374,12 +406,8 @@ void Login::on_btn_regist_clicked()
 {
     Register r;
     r.setParent(this);      //设置父对象
-//    this->hide();
-//    r.show();
    //transmitdb(database);
     r.exec();
-
-    qDebug() << "name:" << add_select_user_name_last << "pwd:" << add_select_user_pwd_last;
 
 //    get_user_info();
     if(user_info_stu.userName.isEmpty() || user_info_stu.passwd.isEmpty()){
@@ -522,6 +550,24 @@ void Login::slot_getKeyBoard()
     qDebug() << "curPath:" << curPath;
 
     QDesktopServices::openUrl(QUrl(curPath, QUrl::TolerantMode));
+}
+
+void Login::slot_setLanguage()
+{
+    menu1->exec(QCursor::pos());
+}
+
+void Login::slot_actGrp(QAction *act)
+{
+    if (act == act0) {
+        qDebug() << "act0";
+    } else if (act == act1) {
+        qDebug() << "act1";
+    } else if (act == act2) {
+        qDebug() << "act2";
+    } else if (act == act3) {
+        qDebug() << "act3";
+    }
 }
 
 void Login::slot_timer1()

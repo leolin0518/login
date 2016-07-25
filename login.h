@@ -6,6 +6,10 @@
 #include <QSqlQuery>
 #include <QMouseEvent>
 #include <QTimer>
+#include <QToolButton>
+#include <QMenu>
+#include <QAction>
+#include <QActionGroup>
 
 struct UserInfoStu{
     QString userName;
@@ -33,6 +37,8 @@ public:
     void set_button();//设置UI上的按钮
     void set_user_img(bool isSandom, int index_img);//设置UI上用户头像
 
+    void create_menuLanguage();         //设置语言菜单
+
 protected:
     void mousePressEvent(QMouseEvent *e);
 
@@ -54,6 +60,10 @@ private slots:
 
     void slot_getKeyBoard();
 
+    void slot_setLanguage();        //设置语言
+
+    void slot_actGrp(QAction* act);
+
     void slot_timer1();
 
     void slot_timer2();
@@ -72,11 +82,26 @@ private:
     QTimer *timer1, *timer2;
     QStringList userPasswd;         //用户密码
 
+    QToolButton *minBtn;
+    QToolButton *closeBbtn;
+    QToolButton *setBtn;
+    QToolButton *keyBtn;
+    QToolButton *status_tBtn;       //在线状态
+
+    QMenu *menu1;                   //语言菜单
+    QAction *act_chinese;
+    QAction *act_english;
+
+    QMenu *menu2;                   //在线状态
+    QAction *act0;                  //在线
+    QAction *act1;                  //隐身
+    QAction *act2;                  //离线
+    QAction *act3;                  //忙碌
+    QActionGroup *actGrp;
+
 public:
     UserInfoStu user_info_stu;
     QSqlDatabase db;
-    QString add_select_user_name_last;
-    QString add_select_user_pwd_last;
 };
 
 #endif // LOGIN_H
