@@ -4,6 +4,7 @@
 #include "exam.h"
 #include "passwdedit.h"
 #include "register.h"
+#include "systemtrayicon.h"
 
 #include <QMessageBox>
 #include <QUrl>
@@ -520,9 +521,18 @@ void Login::on_btn_edit_pwd_clicked()
     }
 }
 
+//最小化button,创建系统托盘
 void Login::slot_minWindow()
 {
     this->showMinimized();
+
+    //设置任务栏系统托盘
+    QStringList strList;
+    strList << "Rose" << "Rose V1.0";
+    QIcon icon(":/images/ico/mini.png");
+    SystemTrayIcon *trayIcon = new SystemTrayIcon(strList, icon, this);
+
+    connect(trayIcon->actFixed, SIGNAL(triggered(bool)), this, SLOT(slot_fixed(bool)));
 }
 
 void Login::slot_closeWindow()

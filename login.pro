@@ -17,12 +17,14 @@ SOURCES += main.cpp\
         login.cpp \
     exam.cpp \
     passwdedit.cpp \
-    register.cpp
+    register.cpp \
+    systemtrayicon.cpp
 
 HEADERS  += login.h \
     exam.h \
     passwdedit.h \
-    register.h
+    register.h \
+    systemtrayicon.h
 
 FORMS    += login.ui \
     exam.ui \
@@ -31,3 +33,5 @@ FORMS    += login.ui \
 
 RESOURCES += \
     myqrc.qrc
+
+

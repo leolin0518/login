@@ -20,5 +20,6 @@
         <file>images/background.png</file>
         <file>images/ico/user0.png</file>
         <file>images/top_img0.png</file>
+        <file>images/ico/zxh.png</file>
     </qresource>
 </RCC>
