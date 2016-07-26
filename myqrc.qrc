@@ -1,8 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/QQ.png</file>
-        <file>images/QQ1.png</file>
-        <file>images/login.png</file>
         <file>images/keyBoard.png</file>
         <file>images/ico/setting.png</file>
         <file>images/top_img1.png</file>
@@ -20,6 +17,6 @@
         <file>images/background.png</file>
         <file>images/ico/user0.png</file>
         <file>images/top_img0.png</file>
-        <file>images/ico/zxh.png</file>
+        <file>images/ico/login_tray.png</file>
     </qresource>
 </RCC>

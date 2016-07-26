@@ -1,5 +1,7 @@
 #include "systemtrayicon.h"
 
+#include <QApplication>
+
 //SystemTrayIcon::SystemTrayIcon(QWidget *parent) : QWidget(parent)
 SystemTrayIcon::SystemTrayIcon(QStringList strList, QIcon icon, QWidget *parent) : QWidget(parent)
 {
@@ -7,14 +9,27 @@ SystemTrayIcon::SystemTrayIcon(QStringList strList, QIcon icon, QWidget *parent)
      m_strList = strList;
      m_icon = icon;
 
-    // createAct();
-    // createTrayMenu();
-     //createTrayIcon();
+     create_sysTrayMenuAct();//1.创建点击托盘菜单项的act行为
+     create_sysTrayMenu();//2.创建托盘菜单
+     create_sysTrayIcon();//3.创建托盘,init
+     //注意初始化顺序：1.init托盘菜单包含的项 2.init托盘菜单 3.init托盘Button
+}
 
+//创建点击托盘菜单项的act行为
+void SystemTrayIcon::create_sysTrayMenuAct()
+{
+//    actFixed = new QAction("锁定位置(&F)",this);
+//    actFixed->setCheckable(true);
+//    actFixed->setChecked(true);
 
-     create_sysTrayIcon();//创建托盘,init
-     create_sysTrayMenu();
-     create_sysTrayMenuAct();
+    act_sys_tray_min = new QAction("最小化(&M)",this);
+    connect(act_sys_tray_min,SIGNAL(triggered()),pWidget,SLOT( hide() ));
+
+    act_sys_tray_normal = new QAction("还 原(&R)",this);
+    connect(act_sys_tray_normal,SIGNAL(triggered()),pWidget,SLOT( showNormal()) );
+
+    act_sys_tray_exit = new QAction("退出(&Q)",this);
+    connect(act_sys_tray_exit,SIGNAL(triggered()),qApp,SLOT( quit()));
 }
 
 
@@ -36,8 +51,9 @@ void SystemTrayIcon::create_sysTrayMenu()
     mSysTrayMenu->addAction(act_sys_tray_exit);
 
     //把QMenu,系统托盘菜单赋给QSystemTrayIcon对象
-    mSysTrayIcon->setContextMenu(mSysTrayMenu);
+//    mSysTrayIcon->setContextMenu(mSysTrayMenu);     //new之后才能使用mSysTrayIcon
 }
+
 
 //创建系统托盘按钮
 void SystemTrayIcon::create_sysTrayIcon()
@@ -52,11 +68,10 @@ void SystemTrayIcon::create_sysTrayIcon()
     mSysTrayIcon->setToolTip(m_strList.at(1));    //托盘时，鼠标放上去的提示信息
     mSysTrayIcon->showMessage(m_strList.at(0), m_strList.at(1), QSystemTrayIcon::Information, 10000);
 
-//    mSysTrayIcon = new QSystemTrayIcon(this);//新建QSystemTrayIcon对象
-//    mSysTrayIcon->setIcon(QIcon(":/images/ico/mini.png")); //设置托盘的icon
-    //mSysTrayIcon->setStyleSheet("background-color:transparent;");
-
-//    mSysTrayIcon->setToolTip(QObject::tr("login_demo"));//当鼠标移动到托盘上的图标时，会显示此处设置的内容
+    //    mSysTrayIcon = new QSystemTrayIcon(this);//新建QSystemTrayIcon对象
+    //    mSysTrayIcon->setIcon(QIcon(":/images/ico/mini.png")); //设置托盘的icon
+    //    mSysTrayIcon->setStyleSheet("background-color:transparent;");
+    //    mSysTrayIcon->setToolTip(QObject::tr("login_demo"));//当鼠标移动到托盘上的图标时，会显示此处设置的内容
 
     mSysTrayIcon->setContextMenu(mSysTrayMenu);//设置托盘上下文菜单
 
@@ -69,22 +84,6 @@ void SystemTrayIcon::create_sysTrayIcon()
 }
 
 
-//创建点击托盘菜单项的act行为
-void SystemTrayIcon::create_sysTrayMenuAct()
-{
-    actFixed = new QAction("锁定位置(&F)",this);
-    actFixed->setCheckable(true);
-    actFixed->setChecked(true);
-
-    act_sys_tray_min = new QAction("最小化(&M)",this);
-    connect(act_sys_tray_min,SIGNAL(triggered()),pWidget,SLOT( hide() ));
-
-    act_sys_tray_normal = new QAction("还 原(&R)",this);
-    connect(act_sys_tray_normal,SIGNAL(triggered()),pWidget,SLOT( showNormal()) );
-
-    act_sys_tray_exit = new QAction("退出(&Q)",this);
-    connect(act_sys_tray_exit,SIGNAL(triggered()),pWidget,SLOT( quit()));
-}
 
 
 

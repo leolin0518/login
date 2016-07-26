@@ -24,6 +24,8 @@ Login::Login(QWidget *parent) :
     init();
 
     connect(this,SIGNAL(close()),this,SLOT(close()));
+
+
 }
 
 Login::~Login()
@@ -69,7 +71,6 @@ void Login::configWindow()
     // 填充背景图片
      QPalette palette;
      palette.setBrush(/*QPalette::Background*/this->backgroundRole(),
-                      //QBrush(QPixmap(":/images/QQ1.png")));
                         QBrush(QPixmap(":/images/background.png")));
      this->setPalette(palette);
 
@@ -77,13 +78,21 @@ void Login::configWindow()
     //去掉窗口边框
     setWindowFlags(Qt::FramelessWindowHint);
 
-    //设置top ,user img
+    //程序init时,设置top ,user img
     set_top_img(true, -1);//设置图片显示为随机显示
     set_user_img(true, -1);//设置user图片为随机显示
-    qDebug() << "xxxxxxxxxxxxxxxxxxxxxxx" ;
 
     //设置UI的按钮button
     set_button();
+
+
+    //设置任务栏系统托盘 start
+    QStringList strList;
+    strList << "Rose" << "Login";//login 为设置trayico的显示提示
+    QIcon icon(":/images/ico/login_tray.png");
+    SystemTrayIcon *trayIcon = new SystemTrayIcon(strList, icon, this);
+    //connect(trayIcon->actFixed, SIGNAL(triggered(bool)), this, SLOT(slot_fixed(bool)));
+    //设置任务栏系统托盘 end
 
 }
 
@@ -521,18 +530,10 @@ void Login::on_btn_edit_pwd_clicked()
     }
 }
 
-//最小化button,创建系统托盘
+//最小化button
 void Login::slot_minWindow()
 {
     this->showMinimized();
-
-    //设置任务栏系统托盘
-    QStringList strList;
-    strList << "Rose" << "Rose V1.0";
-    QIcon icon(":/images/ico/mini.png");
-    SystemTrayIcon *trayIcon = new SystemTrayIcon(strList, icon, this);
-
-    connect(trayIcon->actFixed, SIGNAL(triggered(bool)), this, SLOT(slot_fixed(bool)));
 }
 
 void Login::slot_closeWindow()
