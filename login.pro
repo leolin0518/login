@@ -32,6 +32,8 @@ FORMS    += login.ui \
     register.ui
 
 RESOURCES += \
-    myqrc.qrc
+    myqrc.qrc \
+    lang.qrc
 
-
+TRANSLATIONS+=cn.ts\
+              en.ts

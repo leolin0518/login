@@ -1,6 +1,7 @@
 #include "systemtrayicon.h"
 
 #include <QApplication>
+#include <QDebug>
 
 //SystemTrayIcon::SystemTrayIcon(QWidget *parent) : QWidget(parent)
 SystemTrayIcon::SystemTrayIcon(QStringList strList, QIcon icon, QWidget *parent) : QWidget(parent)
@@ -22,14 +23,25 @@ void SystemTrayIcon::create_sysTrayMenuAct()
 //    actFixed->setCheckable(true);
 //    actFixed->setChecked(true);
 
-    act_sys_tray_min = new QAction("最小化(&M)",this);
+    act_sys_tray_min = new QAction(tr("最小化(&M)"),this);
     connect(act_sys_tray_min,SIGNAL(triggered()),pWidget,SLOT( hide() ));
 
-    act_sys_tray_normal = new QAction("还 原(&R)",this);
+    act_sys_tray_normal = new QAction(tr("还 原(&R)"),this);
     connect(act_sys_tray_normal,SIGNAL(triggered()),pWidget,SLOT( showNormal()) );
 
-    act_sys_tray_exit = new QAction("退出(&Q)",this);
+    act_sys_tray_exit = new QAction(tr("退出(&Q)"),this);
     connect(act_sys_tray_exit,SIGNAL(triggered()),qApp,SLOT( quit()));
+
+    act_sys_tray_lang_ch = new QAction(tr("简体中文(&C)"),this);
+//    connect(act_sys_tray_lang_ch,SIGNAL(triggered()),this,SLOT(set_lang()));
+
+    act_sys_tray_lang_en = new QAction(tr("英语(&E)"),this);
+    acrLangGrp = new QActionGroup(this);
+    acrLangGrp->addAction(act_sys_tray_lang_ch);
+    acrLangGrp->addAction(act_sys_tray_lang_en);
+    connect(acrLangGrp,SIGNAL(triggered(QAction*)),this,SLOT( set_lang(QAction*)));
+
+
 }
 
 
@@ -38,6 +50,16 @@ void SystemTrayIcon::create_sysTrayMenu()
 {
     mSysTrayMenu = new QMenu(this);
     //mSysTrayMenu = new QMenu((QWidget*)QApplication::desktop());
+
+    mSysTrayMenuLangSetting = new QMenu(tr("语言设置"), this);
+//    QList<QAction *> act_list;
+//    act_list << act_sys_tray_lang_ch << act_sys_tray_lang_en;
+//    mSysTrayMenuLangSetting->addActions(act_list);
+
+    mSysTrayMenuLangSetting->addAction(act_sys_tray_lang_ch);
+    mSysTrayMenuLangSetting->addAction(act_sys_tray_lang_en);
+
+    mSysTrayMenu->addMenu(mSysTrayMenuLangSetting);
 
     //新增菜单项---显示主界面
     mSysTrayMenu->addAction(act_sys_tray_normal);
@@ -49,6 +71,10 @@ void SystemTrayIcon::create_sysTrayMenu()
 
     //新增菜单项---退出程序
     mSysTrayMenu->addAction(act_sys_tray_exit);
+
+
+
+//    mSysTrayMenuLangSetting
 
     //把QMenu,系统托盘菜单赋给QSystemTrayIcon对象
 //    mSysTrayIcon->setContextMenu(mSysTrayMenu);     //new之后才能使用mSysTrayIcon
@@ -117,5 +143,38 @@ void SystemTrayIcon::slot_sys_tray_iconActivated(QSystemTrayIcon::ActivationReas
         default:
             break;
     }
+
+}
+
+void SystemTrayIcon::set_lang(QAction *act)
+{
+    qDebug() << act->text();
+    if(act == act_sys_tray_lang_ch)
+    {
+        qDebug() << "china ";
+        translator.load(":/cn.qm");
+        qApp->installTranslator(&translator);
+
+    }
+    if(act == act_sys_tray_lang_en)
+    {
+        qDebug() << "english ";
+        translator.load(":/en.qm");
+        qApp->installTranslator( &translator );
+    }
+    this->refresh();//刷新托盘相关文字
+    emit signal_lang_refresh();//发送刷新页面文字的信号
+}
+
+
+void SystemTrayIcon::refresh()
+{
+    this->act_sys_tray_exit->setText(tr("退出(&Q)"));
+    this->act_sys_tray_min->setText(tr("最小化(&M)"));
+    this->act_sys_tray_lang_ch->setText(tr("简体中文(&C)"));
+    this->act_sys_tray_lang_en->setText(tr("英语(&E)"));
+    this->act_sys_tray_normal->setText(tr("还 原(&R)"));
+    this->mSysTrayMenuLangSetting->setWindowTitle(tr("语言设置"));
+    qDebug() << "lllllllllllll" << this->mSysTrayMenuLangSetting->windowTitle();
 
 }

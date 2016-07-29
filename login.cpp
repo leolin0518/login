@@ -91,7 +91,8 @@ void Login::configWindow()
     strList << "Rose" << "Login";//login 为设置trayico的显示提示
     QIcon icon(":/images/ico/login_tray.png");
     SystemTrayIcon *trayIcon = new SystemTrayIcon(strList, icon, this);
-    //connect(trayIcon->actFixed, SIGNAL(triggered(bool)), this, SLOT(slot_fixed(bool)));
+
+    connect(trayIcon, SIGNAL(signal_lang_refresh()), this, SLOT(refresh()));//关联语言设置函数,刷新界面
     //设置任务栏系统托盘 end
 
 }
@@ -417,7 +418,7 @@ void Login::on_btn_regist_clicked()
     Register r;
     r.setParent(this);      //设置父对象
    //transmitdb(database);
-    r.exec();
+    r.exec();    //注册页面r，仅仅获取信息.
 
 //    get_user_info();
     if(user_info_stu.userName.isEmpty() || user_info_stu.passwd.isEmpty()){
@@ -448,7 +449,7 @@ void Login::on_btn_regist_clicked()
             }
 
             if(exitFlag == false){
-                query.exec(tr("insert into userInfo values ('%1','%2','%3')")
+                query.exec(QString("insert into userInfo values ('%1','%2','%3')")
                            .arg(user_info_stu.userName).arg(user_info_stu.passwd)
                            .arg(user_info_stu.email));
                 qDebug() << "ddd:" << user_info_stu.userName << user_info_stu.passwd << user_info_stu.email;
@@ -616,5 +617,17 @@ void Login::on_cBox_account_currentIndexChanged(int index)
 {
    set_top_img(true,index);
    set_user_img(true,index);
+}
+
+void Login::refresh()//刷新login页面当前的字符串。其它页面无需刷新，因为打开时候，会自动刷新相关字符串。而主窗口不会。
+{
+    qDebug() << "xxxxxxxxxxxxxxxxxxx";
+    ui->btn_login->setText(tr("登录"));
+    ui->btn_edit_pwd->setText(tr("找回密码"));
+    ui->btn_regist->setText(tr("注册用户"));
+    //ui->checkBox_autoLogin->setText(tr("自动登录"));
+    ui->label->setText(tr("记住密码"));
+    ui->label_2->setText(tr("自动登录"));
+
 }
 

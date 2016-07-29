@@ -18,7 +18,7 @@
     <rect>
      <x>30</x>
      <y>40</y>
-     <width>48</width>
+     <width>72</width>
      <height>20</height>
     </rect>
    </property>
@@ -31,7 +31,7 @@
     <rect>
      <x>30</x>
      <y>80</y>
-     <width>48</width>
+     <width>72</width>
      <height>20</height>
     </rect>
    </property>
@@ -44,7 +44,7 @@
     <rect>
      <x>30</x>
      <y>130</y>
-     <width>48</width>
+     <width>72</width>
      <height>20</height>
     </rect>
    </property>
@@ -57,7 +57,7 @@
     <rect>
      <x>30</x>
      <y>180</y>
-     <width>48</width>
+     <width>72</width>
      <height>20</height>
     </rect>
    </property>

@@ -39,6 +39,7 @@ public:
 
     void create_menuLanguage();         //设置语言菜单
 
+
 protected:
     void mousePressEvent(QMouseEvent *e);
 
@@ -73,6 +74,8 @@ private slots:
     void on_btn_edit_pwd_clicked();
 
     void on_cBox_account_currentIndexChanged(int index);
+
+    void refresh();//刷新login界面字符串
 
 private:
     Ui::Login *ui;

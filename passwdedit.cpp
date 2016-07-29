@@ -64,7 +64,7 @@ void passwdEdit::on_btn_ok_clicked()
                 else
                 {
                     QSqlQuery query;
-                    query.exec(tr("update userInfo set passwd = '%1' where name = '%2'")
+                    query.exec(QString ("update userInfo set passwd = '%1' where name = '%2'")
                                .arg(newPasswd).arg(login->user_info_stu.userName));
 
                     QMessageBox::information(this,tr("提示"),tr("密码修改成功！"));
