@@ -33,7 +33,8 @@ FORMS    += login.ui \
 
 RESOURCES += \
     myqrc.qrc \
-    lang.qrc
+    lang.qrc \
+    qss.qrc
 
 TRANSLATIONS+=cn.ts\
               en.ts

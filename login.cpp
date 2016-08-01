@@ -319,6 +319,15 @@ void Login::create_menuLanguage()
     menu1->addAction(act3);
 }
 
+void Login::setStyle(const QString &style)
+{
+    QFile qss( ":/images/qss/" + style);//black.qss
+    qDebug() << "qss                 :";
+    qss.open(QIODevice::ReadOnly | QIODevice::Text);
+    qApp->setStyleSheet(qss.readAll());
+    qss.close();
+}
+
 
 void Login::mousePressEvent(QMouseEvent *e)
 {

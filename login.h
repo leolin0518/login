@@ -39,6 +39,8 @@ public:
 
     void create_menuLanguage();         //设置语言菜单
 
+    void setStyle(const QString &style);//设置style
+
 
 protected:
     void mousePressEvent(QMouseEvent *e);
